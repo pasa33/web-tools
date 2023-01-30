@@ -1,0 +1,77 @@
+
+//copy button
+function copyCode() {
+	selectCode("output");
+	document.execCommand("copy");
+}
+
+//select all output code
+function selectCode(containerid) {
+    if (document.selection) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(document.getElementById(containerid));
+        range.select();
+    } else if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNode(document.getElementById(containerid));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    }
+}
+
+$(function()
+{
+	var emptyOutputMsg = "Go code will appear here";
+	var formattedEmptyOutputMsg = '<span style="color: #777;">'+emptyOutputMsg+'</span>';
+
+	// Hides placeholder text
+	$('#input').on('focus', function() {
+		if (!$(this).val())
+			$('#output').html(formattedEmptyOutputMsg);
+	});
+
+	// Shows placeholder text
+	$('#input').on('blur', function() {
+		if (!$(this).val())
+			$('#output').html(formattedEmptyOutputMsg);
+	}).blur();
+
+	// Automatically do the conversion
+	$('#input').on('input', function()
+	{
+		var input = $(this).val();
+		if (!input)
+		{
+			$('#output').html(formattedEmptyOutputMsg);
+			return;
+		}
+
+		try {
+			var output = httpRawToGowl(input);
+			if (output) {
+				if (typeof gofmt === 'function')
+					output = gofmt(output);
+				var coloredOutput = hljs.highlight("go", output);
+				$('#output').html(coloredOutput.value);
+			}			
+		} catch (e) {
+			$('#output').html('<span class="clr-red">'+e+'</span>');
+		}
+	});
+
+	var dark = true;	
+	$("#dark").click(function()
+	{
+		dark = !dark;
+		if(dark)
+		{
+			$("head").append("<link rel='stylesheet' href='../../resources/css/dark.css' id='dark-css'>");
+			$("#dark").html("Light mode");
+
+		} else
+		{
+			$("#dark-css").remove();
+			$("#dark").html("Dark mode");
+		}		
+	});
+});
