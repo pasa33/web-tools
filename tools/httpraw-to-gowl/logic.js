@@ -83,7 +83,7 @@ function httpRawToGowl(code) {
 
 		go += `req, err := support.MakeReq(\n`
 		go += `\t"` + method + `",\n`
-		go += `\t"https://` + host + path + `",\n`
+		go += "\t`https://" + host + path + "`,\n"
 		go += `\tmap[string][]string{\n`
 		go += headers
 		go += `\t},\n`
