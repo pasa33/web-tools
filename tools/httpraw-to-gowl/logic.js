@@ -41,11 +41,11 @@ function httpRawToGowl(code) {
 				switch (part[0].toLocaleLowerCase()) {
 					case `method`:
 						method = part[1].trimStart()
-						break;
-					case `authority`:
+						break;					
 					case `scheme`:{
 						break
 					}	
+					case `authority`:
 					case `host`:
 						host = part[1].trimStart()
 						break;
@@ -89,6 +89,7 @@ function httpRawToGowl(code) {
 		go += `\t},\n`
 		go += `\t[]string{\n`
 		go += order.toLocaleLowerCase()
+		go += `\t},\n`
 		go += `\t[]string{},\n`
 
 		if (body.length > 0) {
@@ -99,5 +100,15 @@ function httpRawToGowl(code) {
 		go +=`if err != nil {\n\treturn logger.ErrReqSetup\n}\nres, err := t.bot.Client.Do(req)\nif err != nil {\n\treturn logger.ErrReq\n}\ndefer res.Body.Close()\nt.bot.CookieHeader.LoadResponse(res.Cookies())\n`
 
 		return go;
+	}
+
+	function formatUrlForm(urlForm){
+
+		var output = ""
+		var url = String(urlForm).split(/\?(.*)/s)
+
+		if(url.length > 1){
+			output = ""
+		}
 	}
 }
