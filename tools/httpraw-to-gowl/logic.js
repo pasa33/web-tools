@@ -53,6 +53,7 @@ function httpRawToGowl(code) {
 						path = part[1].trimStart()
 						break;
 					case `content-length`:
+						order += `\t\t"` + part[0] + `",\n`
 						break;
 					case `user-agent`:
 						headers += `\t\t"` + part[0] + `": {t.bot.UserAgent},\n`
