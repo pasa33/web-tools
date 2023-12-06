@@ -89,7 +89,7 @@ function httpRawToGowl(code) {
 			params = arrStrings.slice(1).join("");
 
 			rep = "/&/g"
-			params = "`+\n`" + params.replace(rep, "`+\n`&")
+			urlParams = "`+\n`" + params.replace(rep, "`+\n`&")
 		}
 
 		go += `req, err := support.MakeReq(\n`
