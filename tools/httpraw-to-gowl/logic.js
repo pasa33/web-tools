@@ -14,15 +14,16 @@ function httpRawToGowl(code) {
 		var method = "method"
 		var host = "host"
 		var path = "/path"
+		var urlParams
 		var headers = ""
 		var order = ""
 		var body = ""
 		var go = ""
 
-		rawLines.forEach(function(line){
+		rawLines.forEach(function (line) {
 
 			if (line.length == 0) {
-				endHeaders = true								
+				endHeaders = true
 			} else if (endHeaders) {
 				body = line
 			} else {
@@ -41,10 +42,10 @@ function httpRawToGowl(code) {
 				switch (part[0].toLocaleLowerCase()) {
 					case `method`:
 						method = part[1].trimStart()
-						break;					
-					case `scheme`:{
+						break;
+					case `scheme`: {
 						break
-					}	
+					}
 					case `authority`:
 					case `host`:
 						host = part[1].trimStart()
@@ -82,9 +83,18 @@ function httpRawToGowl(code) {
 			go += "postData := `" + body + "`\n\n"
 		}
 
+		if (path.includes("?")) {
+			arrStrings = path.split("?")
+			path = arrStrings[0];
+			params = arrStrings.slice(1).join(separatore);
+
+			rep = "/&/g"
+			params = "`+\n`" + params.replace(rep, "`+\n`&")
+		}
+
 		go += `req, err := support.MakeReq(\n`
 		go += `\t"` + method + `",\n`
-		go += "\t`https://" + host + path + "`,\n"
+		go += "\t`https://" + host + path + urlParams + "`,\n"
 		go += `\tmap[string][]string{\n`
 		go += headers
 		go += `\t},\n`
@@ -98,17 +108,17 @@ function httpRawToGowl(code) {
 		}
 
 		go += `)\n`
-		go +=`if err != nil {\n\treturn logger.ErrReqSetup\n}\nres, err := t.bot.Client.Do(req)\nif err != nil {\n\treturn logger.ErrReq\n}\ndefer res.Body.Close()\nt.bot.CookieHeader.LoadResponse(res.Cookies())\n`
+		go += `if err != nil {\n\treturn logger.ErrReqSetup\n}\nres, err := t.bot.Client.Do(req)\nif err != nil {\n\treturn logger.ErrReq\n}\ndefer res.Body.Close()\nt.bot.CookieHeader.LoadResponse(res.Cookies())\n`
 
 		return go;
 	}
 
-	function formatUrlForm(urlForm){
+	function formatUrlForm(urlForm) {
 
 		var output = ""
 		var url = String(urlForm).split(/\?(.*)/s)
 
-		if(url.length > 1){
+		if (url.length > 1) {
 			output = ""
 		}
 	}
