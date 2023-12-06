@@ -86,7 +86,7 @@ function httpRawToGowl(code) {
 		if (path.includes("?")) {
 			arrStrings = path.split("?")
 			path = arrStrings[0];
-			params = arrStrings.slice(1).join(separatore);
+			params = arrStrings.slice(1).join("");
 
 			rep = "/&/g"
 			params = "`+\n`" + params.replace(rep, "`+\n`&")
