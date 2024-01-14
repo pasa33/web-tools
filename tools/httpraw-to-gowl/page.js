@@ -24,16 +24,23 @@ $(function()
 	var emptyOutputMsg = "Go code will appear here";
 	var formattedEmptyOutputMsg = '<span style="color: #777;">'+emptyOutputMsg+'</span>';
 
+	var emptyUaMsg = "UserAgent will appear here";
+	var formattedEmptyUaMsg = '<span style="color: #777;">'+emptyUaMsg+'</span>';
+
 	// Hides placeholder text
 	$('#input').on('focus', function() {
-		if (!$(this).val())
+		if (!$(this).val()){
 			$('#output').html(formattedEmptyOutputMsg);
+			$('#ua').html(formattedEmptyUaMsg);
+		}
 	});
 
 	// Shows placeholder text
 	$('#input').on('blur', function() {
-		if (!$(this).val())
+		if (!$(this).val()){
 			$('#output').html(formattedEmptyOutputMsg);
+			$('#ua').html(formattedEmptyUaMsg);
+		}
 	}).blur();
 
 	// Automatically do the conversion
@@ -43,16 +50,20 @@ $(function()
 		if (!input)
 		{
 			$('#output').html(formattedEmptyOutputMsg);
+			$('#ua').html(formattedEmptyUaMsg);
 			return;
 		}
 
 		try {
-			var output = httpRawToGowl(input);
+			res = httpRawToGowl(input);
+			var ua = res[0]
+			var output = res[1]
 			if (output) {
 				if (typeof gofmt === 'function')
 					output = gofmt(output);
 				var coloredOutput = hljs.highlight("go", output);
 				$('#output').html(coloredOutput.value);
+				$('#ua').html(ua);
 			}			
 		} catch (e) {
 			$('#output').html('<span class="clr-red">'+e+'</span>');

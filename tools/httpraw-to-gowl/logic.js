@@ -14,10 +14,11 @@ function httpRawToGowl(code) {
 		var method = "method"
 		var host = "host"
 		var path = "/path"
-		var urlParams
+		var urlParams = ""
 		var headers = ""
 		var order = ""
 		var body = ""
+		var ua = ""
 		var go = ""
 
 		rawLines.forEach(function (line) {
@@ -57,6 +58,7 @@ function httpRawToGowl(code) {
 						order += `\t\t"` + part[0] + `",\n`
 						break;
 					case `user-agent`:
+						ua = part[1].trimStart()
 						headers += `\t\t"` + part[0] + `": {t.bot.UserAgent},\n`
 						order += `\t\t"` + part[0] + `",\n`
 						break;
@@ -109,16 +111,16 @@ function httpRawToGowl(code) {
 		go += `)\n`
 		go += `if err != nil {\n\treturn logger.ErrReqSetup\n}\nres, err := t.bot.Client.Do(req)\nif err != nil {\n\treturn logger.ErrReq\n}\ndefer res.Body.Close()\nt.bot.CookieHeader.LoadResponse(res.Cookies())\n`
 
-		return go;
+		return [ua, go];
 	}
 
-	function formatUrlForm(urlForm) {
+	// function formatUrlForm(urlForm) {
 
-		var output = ""
-		var url = String(urlForm).split(/\?(.*)/s)
+	// 	var output = ""
+	// 	var url = String(urlForm).split(/\?(.*)/s)
 
-		if (url.length > 1) {
-			output = ""
-		}
-	}
+	// 	if (url.length > 1) {
+	// 		output = ""
+	// 	}
+	// }
 }

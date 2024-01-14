@@ -22,6 +22,11 @@ div#output {
     border: none;
 } 
 
+div#ua { 
+    background: #303030; 
+    border: none;
+} 
+
 textarea#input { 
     background-color: #303030; 
     border: none;
